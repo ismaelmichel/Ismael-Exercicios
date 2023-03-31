@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /*
 |--------------------------------------------------------------------------
 | Routes
@@ -24,4 +25,7 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.post('/fabrica', 'FabricasController.store')
+Route.resource('/fabrica', 'FabricasController');
+Route.resource('/fornecedor', 'FornecedoresController')
+Route.resource('/produto', 'ProdutosController')
+

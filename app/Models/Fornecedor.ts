@@ -12,7 +12,7 @@ export default class Fornecedor extends BaseModel {
   public nome_for: string
 
   @column()
-  public status: string
+  public estatuto: string
 
   @column()
   public cidade_for: string

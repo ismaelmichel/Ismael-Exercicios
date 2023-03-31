@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('numero_for')
       table.string('nome_for')
-      table.string('status')
+      table.string('estatuto')
       table.string('cidade_for')
 
       /**
