@@ -12,13 +12,14 @@ export default class FornecedoresController {
         genericResponse=new GenericResponse()
     }
 
-    public async index({request, response}: HttpContextContract){
-        try {
-            const data = await request.qs();
+    public async index({}: HttpContextContract){
+       /*  try {
+            const data = await request.qs(); */
 
             const fornecedor = await Fornecedor.all();
+            return fornecedor
 
-            genericResponse.msg="Operção com sucesso"
+            /* genericResponse.msg="Operção com sucesso"
             genericResponse.data=fornecedor
             genericResponse.error=false
             
@@ -30,6 +31,7 @@ export default class FornecedoresController {
                 
             return response.status(500).json(genericResponse)
         }
+         */
     }
 
     public async store({request, response}:HttpContextContract){

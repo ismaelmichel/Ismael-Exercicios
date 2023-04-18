@@ -2,6 +2,7 @@
  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Produto from 'App/Models/Produto';
 import { GenericResponse } from 'App/Utils/basicMethod';
+import I18n from '@ioc:Adonis/Addons/I18n'
 
 let genericResponse : GenericResponse
 
@@ -10,12 +11,14 @@ export default class ProdutosController {
         genericResponse = new GenericResponse()
     }
 
-    public async index({request, response}: HttpContextContract){
-        const body = request.qs();
+    public async index({request, response}: HttpContextContract){        
         try {
-            const data = await Produto.all()
+            const body = request.qs();
+            const data = await Produto.query().if(body.numero_for, (query)=>{
+                query.where('numero_prod', body.numero_for )
+            })
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = I18n.locale(body.locale).formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
@@ -28,6 +31,7 @@ export default class ProdutosController {
             return response.status(500).json(genericResponse)
         }
     }
+
 
     public async store({request, response}: HttpContextContract){
         const body = request.body();
@@ -101,7 +105,7 @@ export default class ProdutosController {
 
             await data.delete();
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = I18n.locale('en').formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 

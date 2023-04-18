@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /*
 |--------------------------------------------------------------------------
 | Application middleware
@@ -39,3 +40,8 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 |
 */
 Server.middleware.registerNamed({})
+
+Server.middleware.register([
+    // ... other middleware(s)
+    () => import('App/Middleware/DetectUserLocale')
+  ])
