@@ -1,26 +1,26 @@
 /* eslint-disable prettier/prettier */
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Puf from 'App/Models/Puf';
+ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import FabricaProduto from 'App/Models/FabricaProduto';
 import { GenericResponse } from 'App/Utils/basicMethod';
 
-    let genericResponse: GenericResponse
+let genericResponse: GenericResponse
 
-export default class PufsController {    
+export default class FabricaProdutosController {    
 
     constructor (){
         genericResponse = new GenericResponse()
     }
 
-    // List Puf
+    // List FabricaProduto
     public async index({request, response}: HttpContextContract){
         try {
             const data = request.qs();
-            const puf = await Puf.query().if(data.numero_fab, (query)=>{
+            const fabricaProduto = await FabricaProduto.query().if(data.numero_fab, (query)=>{
                 query.where('numero_fab', data.numero_fab)
             })
 
             genericResponse.msg="Operção com sucesso"
-            genericResponse.data=puf
+            genericResponse.data=fabricaProduto
             genericResponse.error=false
       
             return response.status(200).json(genericResponse)
@@ -35,12 +35,12 @@ export default class PufsController {
 
     // create
     public async store({request, response}: HttpContextContract){
-        const body = request.body()
+        const body = request.body();
         try {
-            const data = await Puf.create(body)
-            
+           // const data = await FabricaProduto.create(body)
+
             genericResponse.msg="Operção com sucesso"
-            genericResponse.data=data
+            genericResponse.data=body
             genericResponse.error=false
       
             return response.status(200).json(genericResponse)
@@ -56,7 +56,7 @@ export default class PufsController {
     //List fabrica by id
     public async show({params, response}: HttpContextContract){
         try {
-            const data = await Puf.findOrFail(params.id)
+            const data = await FabricaProduto.findOrFail(params.id)
 
             genericResponse.msg="Operção com sucesso"
             genericResponse.data=data
@@ -73,7 +73,7 @@ export default class PufsController {
     //Delete fabrica by id
     public async destroy({params, response}: HttpContextContract){
         try {
-            const data = await Puf.findOrFail(params.id)
+            const data = await FabricaProduto.findOrFail(params.id)
 
             await data.delete()
 

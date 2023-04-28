@@ -12,14 +12,15 @@ export default class FornecedoresController {
         genericResponse=new GenericResponse()
     }
 
-    public async index({}: HttpContextContract){
-       /*  try {
-            const data = await request.qs(); */
+    public async index({request, response}: HttpContextContract){
+        try {
+            const data = await request.qs();
 
-            const fornecedor = await Fornecedor.all();
-            return fornecedor
-
-            /* genericResponse.msg="Operção com sucesso"
+            const fornecedor = await Fornecedor.query().if(data.numero_for, (query)=>{
+                query.where('numero_for', data.numero_for)
+              });
+            
+            genericResponse.msg="Operção com sucesso"
             genericResponse.data=fornecedor
             genericResponse.error=false
             
@@ -31,10 +32,10 @@ export default class FornecedoresController {
                 
             return response.status(500).json(genericResponse)
         }
-         */
+        
     }
 
-    public async store({request, response}:HttpContextContract){
+    public async store({request, response}: HttpContextContract){
         const body = request.body();
         try {
             const data = await Fornecedor.create(body)
@@ -78,7 +79,7 @@ export default class FornecedoresController {
             fornecedor.numero_for = body.numero_for
             fornecedor.nome_for = body.nome_for
             fornecedor.estatuto = body.estatuto
-            fornecedor.cidade_for = body.Tarrafal            
+            fornecedor.cidade_for = body.cidade_for            
 
             await fornecedor.save()
 

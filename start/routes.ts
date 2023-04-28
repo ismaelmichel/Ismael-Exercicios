@@ -28,4 +28,8 @@ Route.get('/', async () => {
 Route.resource('/fabrica', 'FabricasController');
 Route.resource('/fornecedor', 'FornecedoresController')
 Route.resource('/produto', 'ProdutosController')
+Route.resource('/fabricafornecedor', 'FabricaFornecedorsController');
+Route.resource('/fornecedorproduto', 'FornecedorProdutosController')
+Route.resource('/fabricaproduto', 'FabricaProdutosController')
+Route.resource('/puf', 'PufsController')
 
