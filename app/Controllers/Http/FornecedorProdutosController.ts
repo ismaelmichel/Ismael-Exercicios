@@ -70,6 +70,32 @@ export default class FornecedorProdutosController {
         } 
     }
 
+    //update fornecedorproduto
+    public async update({request, response, params}: HttpContextContract){
+        const body = request.body();
+        try {
+            const data = await FornecedorProduto.findOrFail(params.id)
+
+            data.numero_for = body.numero_for
+            data.numero_prod = body.numero_prod
+
+            await data.save()
+
+            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.data = data
+            genericResponse.error = false
+
+            return response.status(201).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.error = true
+
+            return response.status(500).json(genericResponse) 
+        }
+
+    }
+
     //Delete fabrica by id
     public async destroy({params, response}: HttpContextContract){
         try {

@@ -70,6 +70,34 @@ export default class FabricaFornecedorsController {
         } 
     }
 
+
+    //update fabricafornecedor
+    public async update({request, response, params}: HttpContextContract){
+        const body = request.qs();
+        try {
+            const data = await FabricaFornecedor.findOrFail(params.id)
+
+            data.numero_for = body.numero_for
+            data.numero_fab = body.numero_fab
+
+            await data.save()
+
+            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.data = data
+            genericResponse.error = false
+
+            return response.status(201).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.error = true
+
+            return response.status(500).json(genericResponse) 
+        }
+
+    }
+
+
     //Delete fabrica by id
     public async destroy({params, response}: HttpContextContract){
         try {

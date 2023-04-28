@@ -53,6 +53,34 @@ export default class PufsController {
         } 
     }
 
+    //update puf
+    public async update({request, response, params}: HttpContextContract){
+        const body = request.body();
+        try {
+            const data = await Puf.findOrFail(params.id)
+
+            data.numero_for = body.numero_for
+            data.numero_fab = body.numero_fab
+            data.numero_prod = body.numero_prod
+            data.quantidade = body.quantidade
+
+            await data.save()
+
+            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.data = data
+            genericResponse.error = false
+
+            return response.status(201).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.error = true
+
+            return response.status(500).json(genericResponse) 
+        }
+
+    }
+
     //List fabrica by id
     public async show({params, response}: HttpContextContract){
         try {

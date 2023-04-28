@@ -37,10 +37,10 @@ export default class FabricaProdutosController {
     public async store({request, response}: HttpContextContract){
         const body = request.body();
         try {
-           // const data = await FabricaProduto.create(body)
+            const data = await FabricaProduto.create(body)
 
             genericResponse.msg="Operção com sucesso"
-            genericResponse.data=body
+            genericResponse.data=data
             genericResponse.error=false
       
             return response.status(200).json(genericResponse)
@@ -68,6 +68,32 @@ export default class FabricaProdutosController {
               
             return response.status(500).json(genericResponse)
         } 
+    }
+
+    //update fabricaproduto
+    public async update({request, response, params}: HttpContextContract){
+        const body = request.body();
+        try {
+            const data = await FabricaProduto.findOrFail(params.id)
+
+            data.numero_fab = body.numero_fab
+            data.numero_prod = body.numero_prod
+
+            await data.save()
+
+            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.data = data
+            genericResponse.error = false
+
+            return response.status(201).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.error = true
+
+            return response.status(500).json(genericResponse) 
+        }
+
     }
 
     //Delete fabrica by id

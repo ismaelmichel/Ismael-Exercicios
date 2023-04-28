@@ -71,6 +71,7 @@ export default class ProdutosController {
         }
     }
 
+    //update produto
     public async update({request, response, params}: HttpContextContract){
         const body = request.body();
         try {
