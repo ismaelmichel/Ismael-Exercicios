@@ -16,7 +16,7 @@ export default class FornecedorProdutosController {
         try {
             const data = request.qs();
             const fornecedorProduto = await FornecedorProduto.query().if(data.numero_for, (query)=>{
-                query.where('numero_for', data.numero_fab)
+                query.where('numero_for', data.numero_for) 
             })
 
             genericResponse.msg="Operção com sucesso"

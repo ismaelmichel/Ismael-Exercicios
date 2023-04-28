@@ -17,6 +17,8 @@ export default class PufsController {
             const data = request.qs();
             const puf = await Puf.query().if(data.numero_fab, (query)=>{
                 query.where('numero_fab', data.numero_fab)
+            }).if(data.numero_prod, (query)=>{
+                query.where('numero_prod', data.numero_prod)
             })
 
             genericResponse.msg="Operção com sucesso"

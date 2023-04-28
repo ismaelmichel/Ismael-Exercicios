@@ -2,6 +2,7 @@
  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
  import FabricaFornecedor from 'App/Models/FabricaFornecedor'
  import { GenericResponse } from 'App/Utils/basicMethod'
+ import Produto from 'App/Models/Produto';
 
  let genericResponse: GenericResponse
 
@@ -13,14 +14,18 @@ export default class FabricaFornecedorsController {
 
     // List fabricaFornecedor
     public async index({request, response}: HttpContextContract){
+        const data = request.qs();
         try {
-            const data = request.qs();
+            const produtoCor = await Produto.query().if(data.cor, (query)=>{
+                query.where('cor', data.cor )
+            })
+
             const fabricaFornecedor = await FabricaFornecedor.query().if(data.numero_fab, (query)=>{
                 query.where('numero_fab', data.numero_fab)
             })
 
             genericResponse.msg="Operção com sucesso"
-            genericResponse.data=fabricaFornecedor
+            genericResponse.data= fabricaFornecedor
             genericResponse.error=false
       
             return response.status(200).json(genericResponse)
