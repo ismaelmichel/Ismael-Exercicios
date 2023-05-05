@@ -2,6 +2,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import FornecedorProduto from 'App/Models/FornecedorProduto';
 import { GenericResponse } from 'App/Utils/basicMethod';
+import Produto from 'App/Models/Produto';
+import Database from '@ioc:Adonis/Lucid/Database';
+import Fornecedor from 'App/Models/Fornecedor';
+
 
 let genericResponse: GenericResponse
 
@@ -13,14 +17,15 @@ export default class FornecedorProdutosController {
 
     // List FornecedorProduto
     public async index({request, response}: HttpContextContract){
+        const data = request.qs();
         try {
-            const data = request.qs();
-            const fornecedorProduto = await FornecedorProduto.query().if(data.numero_for, (query)=>{
-                query.where('numero_for', data.numero_for) 
-            })
 
+            const fornecedorProduto = await FornecedorProduto.query().if(data.numero_for, (query)=>{
+                query.where('numero_for', data.numero_for)
+            })            
+            
             genericResponse.msg="Operção com sucesso"
-            genericResponse.data=fornecedorProduto
+            genericResponse.data=  fornecedorProduto
             genericResponse.error=false
       
             return response.status(200).json(genericResponse)
@@ -31,6 +36,40 @@ export default class FornecedorProdutosController {
               
             return response.status(500).json(genericResponse)
         }  
+    }
+
+    // Listar nome cor produto fornecido pelo fornecedor X
+    public async produtoFornecedor({request, response}: HttpContextContract){
+        const data = request.qs()
+        try {
+            if(!data.numero_for) {
+                genericResponse.error=true
+                genericResponse.msg="Operação falhada... Tem de indicar numero fornecedor"
+                
+                return response.status(500).json(genericResponse)
+            }
+            const fornecedorProduto = await Database.from(FornecedorProduto.table + ' as fp')
+                .select({
+                    nome_fornecedor: 'f.nome_for',
+                    nome_produto: 'p.nome_prod',
+                    cor: 'p.cor'
+                })
+                .innerJoin(Produto.table+' as p','p.numero_prod','fp.numero_prod')
+                .innerJoin(Fornecedor.table+' as f','f.numero_for','fp.numero_for')
+                .where('fp.numero_for', data.numero_for)           
+
+            genericResponse.msg="Operção com sucesso"
+            genericResponse.data= fornecedorProduto
+            genericResponse.error=false
+      
+            return response.status(200).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.error=true
+            genericResponse.msg="Operação falhada"
+
+            return response.status(500).json(genericResponse)
+        } 
     }
 
     // create
