@@ -82,8 +82,8 @@ export default class FabricaFornecedorsController {
         try {
             const data = await FabricaFornecedor.findOrFail(params.id)
 
-            data.numero_for = body.numero_for
-            data.numero_fab = body.numero_fab
+            data.numeroFor = body.numero_for
+            data.numeroFab = body.numero_fab
 
             await data.save()
 

@@ -76,8 +76,8 @@ export default class FabricaProdutosController {
         try {
             const data = await FabricaProduto.findOrFail(params.id)
 
-            data.numero_fab = body.numero_fab
-            data.numero_prod = body.numero_prod
+            data.numeroFab = body.numero_fab
+            data.numeroProd = body.numero_prod
 
             await data.save()
 

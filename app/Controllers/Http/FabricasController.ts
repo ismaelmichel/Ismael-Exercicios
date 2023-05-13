@@ -116,9 +116,9 @@ export default class FabricasController {
     const body = request.body()
     const fabrica = await Fabrica.findOrFail(params.id);
 
-    fabrica.numero_fab = body.numero_fab,
-    fabrica.nome_fab = body.nome_fab,
-    fabrica.cidade_fab = body.cidade_fab,
+    fabrica.numeroFab = body.numero_fab,
+    fabrica.nomeFab = body.nome_fab,
+    fabrica.cidadeFab = body.cidade_fab,
 
     await fabrica.save()
 
