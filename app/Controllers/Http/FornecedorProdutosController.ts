@@ -5,6 +5,7 @@ import { GenericResponse } from 'App/Utils/basicMethod';
 import Produto from 'App/Models/Produto';
 import Database from '@ioc:Adonis/Lucid/Database';
 import Fornecedor from 'App/Models/Fornecedor';
+import CreatefornecedorprodutoValidator from 'App/Validators/CreatefornecedorprodutoValidator';
 
 
 let genericResponse: GenericResponse
@@ -74,7 +75,22 @@ export default class FornecedorProdutosController {
 
     // create
     public async store({request, response}: HttpContextContract){
-        const body = request.body()
+        let body;
+        try {
+            body = await request.validate(CreatefornecedorprodutoValidator)
+        } catch (error) {
+            let data = await error.messages.errors.map((e)=>{
+                return{
+                    field: e.field,
+                    message: e.message
+                }
+            })
+            genericResponse.msg = data
+            genericResponse.error = true
+          
+            return response.status(400).json(genericResponse)
+        }
+
         try {
             const data = await FornecedorProduto.create(body)
             
@@ -115,8 +131,8 @@ export default class FornecedorProdutosController {
         try {
             const data = await FornecedorProduto.findOrFail(params.id)
 
-            data.numero_for = body.numero_for
-            data.numero_prod = body.numero_prod
+            data.numeroFor = body.numero_for
+            data.numeroProd = body.numero_prod
 
             await data.save()
 

@@ -35,9 +35,9 @@ export default class ProdutosController {
 
 
     public async store({request, response}: HttpContextContract){
-        let payload ;
+        let body ;
         try {            
-            payload = await request.validate(CreateprodutoValidator)
+            body = await request.validate(CreateprodutoValidator)
         } catch (error) {
             let data = error.messages.errors.map((e)=>{
                 return {
@@ -52,7 +52,7 @@ export default class ProdutosController {
         }
 
         try {
-            const data = await Produto.create(payload)
+            const data = await Produto.create(body)
             
             genericResponse.msg = "Produto registado com sucesso!!!"
             genericResponse.data = data

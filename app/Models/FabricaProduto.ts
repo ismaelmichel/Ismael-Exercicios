@@ -19,7 +19,4 @@ export default class FabricaProduto extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(()=> Fabrica)
-  public fabrica: BelongsTo<typeof Fabrica>
-
 }

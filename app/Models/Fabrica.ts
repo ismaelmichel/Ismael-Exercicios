@@ -20,8 +20,4 @@ export default class Fabrica extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
   
-
-  @manyToMany(()=> Fornecedor)
-  public fornecedor: ManyToMany<typeof Fornecedor>
-
 }

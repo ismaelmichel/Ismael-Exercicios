@@ -3,6 +3,7 @@
 import Fornecedor from 'App/Models/Fornecedor';
 
 import { GenericResponse } from "App/Utils/basicMethod";
+import CreatefornecedorValidator from 'App/Validators/CreatefornecedorValidator';
 
 
 let genericResponse: GenericResponse
@@ -36,7 +37,22 @@ export default class FornecedoresController {
     }
 
     public async store({request, response}: HttpContextContract){
-        const body = request.body();
+        let body;
+        try {
+            body= await request.validate(CreatefornecedorValidator)
+        } catch (error) {
+            let data = error.messages.errors.map((e)=>{
+                return{
+                    field: e.field,
+                    message: e.message
+                }
+            })
+            genericResponse.msg = data
+            genericResponse.error = true
+          
+            return response.status(400).json(genericResponse)
+        }
+
         try {
             const data = await Fornecedor.create(body)
             genericResponse.msg="Operção com sucesso"
@@ -77,10 +93,9 @@ export default class FornecedoresController {
         try {
             const fornecedor = await Fornecedor.findOrFail(params.id)
 
-            fornecedor.numero_for = body.numero_for
-            fornecedor.nome_for = body.nome_for
+            fornecedor.nomeFor = body.nome_for
             fornecedor.estatuto = body.estatuto
-            fornecedor.cidade_for = body.cidade_for            
+            fornecedor.cidadeFor = body.cidade_for            
 
             await fornecedor.save()
 
