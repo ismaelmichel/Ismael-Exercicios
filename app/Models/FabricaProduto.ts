@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Fabrica from './Fabrica'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class FabricaProduto extends BaseModel {
   @column({ isPrimary: true })
