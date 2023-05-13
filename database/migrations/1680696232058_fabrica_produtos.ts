@@ -7,8 +7,9 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('numero_fab')
-      table.integer('numero_prod')
+      table.integer('numero_fab').references('fabricas.numero_fab')
+      table.integer('numero_prod').references('produtos.numero_prod')
+      table.unique(['numero_fab','numero_prod'])
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

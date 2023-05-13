@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database';
+import Fabrica from 'App/Models/Fabrica';
+import Fornecedor from 'App/Models/Fornecedor';
+import Produto from 'App/Models/Produto';
 import Puf from 'App/Models/Puf';
 import { GenericResponse } from 'App/Utils/basicMethod';
 
@@ -33,6 +37,40 @@ export default class PufsController {
               
             return response.status(500).json(genericResponse)
         }  
+    }
+
+    //Querie 5 => numero fornecedor q abastence fabrica x de produto cor y
+    public async fornecedorfabrica({request, response}: HttpContextContract){
+        const filter = request.qs()
+        try {
+            const fornecedor = await Database.from(Puf.table + ' as puf')
+            .select({
+                nome_fornecedor: 'for.nome_for',
+                numero_fornecedor: 'for.numero_for',
+                numero_fabrica: 'f.numero_fab',
+                nome_fabrica: 'f.nome_fab',
+                numero_produto: 'p.numero_prod',
+                nome_produto: 'p.nome_prod',
+                cor_produto: 'p.cor'
+            })
+            .innerJoin(Fabrica.table + ' as f', 'puf.numero_fab', 'f.numero_fab')
+            .innerJoin(Produto.table + ' as p', 'puf.numero_prod', 'p.numero_prod')
+            .innerJoin(Fornecedor.table+ ' as for', 'puf.numero_for','for.numero_for')
+            .where('puf.numero_fab', filter.numero_fab)
+            .where('p.cor', filter.cor_produto)
+
+            genericResponse.msg="Operção com sucesso"
+            genericResponse.data= fornecedor
+            genericResponse.error=false
+      
+            return response.status(200).json(genericResponse)
+            
+        } catch (error) {
+            genericResponse.error=true
+            genericResponse.msg="Operação falhada"
+
+            return response.status(500).json(genericResponse)
+        } 
     }
 
     // create

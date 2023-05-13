@@ -33,5 +33,6 @@ Route.resource('/fornecedorproduto', 'FornecedorProdutosController')
 Route.resource('/fabricaproduto', 'FabricaProdutosController')
 Route.resource('/puf', 'PufsController')
 
-Route.get('/produtofornecedorfilter', 'FornecedorProdutosController.produtoFornecedor')
-
+Route.get('/querie4', 'FornecedorProdutosController.produtoFornecedor')
+Route.get('/querie5', 'PufsController.fornecedorfabrica')
+Route.get('/querie6', 'FabricasController.fornecedorfabrica')

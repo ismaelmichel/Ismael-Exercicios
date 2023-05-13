@@ -1,6 +1,10 @@
 /* eslint-disable prettier/prettier */
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database';
 import Fabrica from 'App/Models/Fabrica'
+import FabricaFornecedor from 'App/Models/FabricaFornecedor';
+import Fornecedor from 'App/Models/Fornecedor';
+import User from 'App/Models/User';
 import { GenericResponse } from 'App/Utils/basicMethod';
 
 let genericResponse: GenericResponse
@@ -33,6 +37,39 @@ export default class FabricasController {
       return response.status(500).json(genericResponse)
     }    
 
+  }
+
+  //Querie 6 => nome fornecedor q abastence fabrica de cidade x em produto cor y
+  public async fornecedorfabrica({request, response}: HttpContextContract){
+    const filter = request.qs()
+    try {
+      /* const fornecedor = await Database.from(Fabrica.table + ' as f')
+      .select({
+        nome_fabrica: 'f.nome_fab',
+        numero_fabrica: 'f.numero_fab',
+        cidade_fabrica: 'f.cidade_fab',
+        nome_fornecedor: 'for.nome_for',
+        numero_fornecedor: 'for.numero_for'
+      })
+      .innerJoin(FabricaFornecedor.table + ' as ff','f.numero_fab','ff.numero_fab')
+      .innerJoin(Fornecedor.table + ' as for', 'for.numero_for','ff.numero_for')
+      .where('f.cidade_fab', filter.cidade_fab) */
+
+      let fornecedor = await User.query()
+                      .preload('posts')
+
+        genericResponse.msg="Operção com sucesso"
+        genericResponse.data= fornecedor
+        genericResponse.error=false
+      
+            return response.status(200).json(genericResponse)
+      
+    } catch (error) {
+      genericResponse.error=true
+      genericResponse.msg="Operação falhada"
+        console.log("ERR", error)
+      return response.status(500).json(genericResponse)
+    } 
   }
 
   // Create fabrica

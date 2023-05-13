@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
@@ -5,9 +6,8 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.integer('numero_prod')
-      table.string('nome_prod')
+      table.integer('numero_prod').primary()
+      table.string('nome_prod')      
       table.string('cor')
       table.string('peso')
 

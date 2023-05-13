@@ -1,20 +1,22 @@
 /* eslint-disable prettier/prettier */
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import Post from './Post'
 
-export default class FornecedorProduto extends BaseModel {
+export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-  
+
   @column()
-  public numeroProd: number
-  
-  @column()
-  public numeroFor: number
+  public name: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+  
+
+  @hasMany(() => Post)
+  public posts: HasMany<typeof Post>
 }

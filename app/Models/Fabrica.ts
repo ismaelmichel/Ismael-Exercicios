@@ -1,22 +1,27 @@
+/* eslint-disable prettier/prettier */
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import FabricaProduto from './FabricaProduto'
+import Fornecedor from './Fornecedor'
 
 export default class Fabrica extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public numeroFab: number
 
   @column()
-  public numero_fab: number
+  public nomeFab: string
 
   @column()
-  public nome_fab: string
-
-  @column()
-  public cidade_fab: string
+  public cidadeFab: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+  
+
+  @manyToMany(()=> Fornecedor)
+  public fornecedor: ManyToMany<typeof Fornecedor>
+
 }

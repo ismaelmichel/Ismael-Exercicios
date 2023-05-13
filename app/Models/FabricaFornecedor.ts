@@ -7,10 +7,10 @@ export default class FabricaFornecedor extends BaseModel {
   public id: number
 
   @column()
-  public numero_fab: number
+  public numeroFab: number
   
   @column()
-  public numero_for: number
+  public numeroFor: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

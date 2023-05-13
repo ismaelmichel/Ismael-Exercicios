@@ -3,6 +3,7 @@
 import Produto from 'App/Models/Produto';
 import { GenericResponse } from 'App/Utils/basicMethod';
 import I18n from '@ioc:Adonis/Addons/I18n'
+import CreateprodutoValidator from 'App/Validators/CreateprodutoValidator';
 
 let genericResponse : GenericResponse
 
@@ -34,10 +35,25 @@ export default class ProdutosController {
 
 
     public async store({request, response}: HttpContextContract){
-        const body = request.body();
-        try {
-            const data = await Produto.create(body)
+        let payload ;
+        try {            
+            payload = await request.validate(CreateprodutoValidator)
+        } catch (error) {
+            let data = error.messages.errors.map((e)=>{
+                return {
+                    field: e.field,
+                    message: e.message
+                }
+            })
+            genericResponse.msg = data
+            genericResponse.error = true
+          
+            return response.status(400).json(genericResponse)
+        }
 
+        try {
+            const data = await Produto.create(payload)
+            
             genericResponse.msg = "Produto registado com sucesso!!!"
             genericResponse.data = data
             genericResponse.error = false
@@ -47,7 +63,6 @@ export default class ProdutosController {
         } catch (error) {
             genericResponse.msg = "Operação falhada!!!"
             genericResponse.error = true
-
             return response.status(500).json(genericResponse)
         }
         
@@ -77,8 +92,8 @@ export default class ProdutosController {
         try {
             const produto = await Produto.findOrFail(params.id)
 
-            produto.numero_prod = body.numero_prod
-            produto.nome_prod = body.nome_prod
+            produto.numeroProd = body.numero_prod
+            produto.nomeProd = body.nome_prod
             produto.cor = body.cor
             produto.peso = body.peso
 

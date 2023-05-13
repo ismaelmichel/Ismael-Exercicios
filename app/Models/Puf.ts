@@ -6,13 +6,13 @@ export default class Puf extends BaseModel {
   public id: number
 
   @column()
-  public numero_for: number
+  public numeroFor: number
 
   @column()
-  public numero_fab: number
+  public numeroFab: number
 
   @column()
-  public numero_prod: number
+  public numeroProd: number
 
   @column()
   public quantidade: number
