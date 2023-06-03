@@ -15,10 +15,12 @@ export default class ProdutosController {
     public async index({request, response}: HttpContextContract){        
         try {
             const body = request.qs();
-            const data = await Produto.query().if(body.numero_for, (query)=>{
+            /* const data = await Produto.query().if(body.numero_for, (query)=>{
                 query.where('numero_prod', body.numero_for )
-            })
+            }) */
 
+            let data = await Produto.query().preload('fornecedorproduto')
+            
             genericResponse.msg = I18n.locale(body.locale).formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
@@ -28,7 +30,7 @@ export default class ProdutosController {
         } catch (error) {
             genericResponse.msg = "Operação falhada!!!"
             genericResponse.error = true
-
+            console.log("EEERRR", error)
             return response.status(500).json(genericResponse)
         }
     }

@@ -17,7 +17,8 @@ export default class FornecedoresController {
         try {
             const data = await request.qs();
 
-            const fornecedor = await Fornecedor.query().if(data.numero_for, (query)=>{
+            const fornecedor = await Fornecedor.query().preload('fornecedorproduto')
+            .if(data.numero_for, (query)=>{
                 query.where('numero_for', data.numero_for)
               });
             

@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import FornecedorProduto from './FornecedorProduto'
 
 export default class Produto extends BaseModel {
   @column({ isPrimary: true })
@@ -19,4 +21,10 @@ export default class Produto extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+
+  @hasMany(() => FornecedorProduto, {foreignKey: 'numeroProd'})
+  public fornecedorproduto: HasMany<typeof FornecedorProduto>
+  
+
 }
