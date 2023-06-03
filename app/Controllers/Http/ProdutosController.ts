@@ -15,12 +15,11 @@ export default class ProdutosController {
     public async index({request, response}: HttpContextContract){        
         try {
             const body = request.qs();
-            /* const data = await Produto.query().if(body.numero_for, (query)=>{
+            let data = await Produto.query().preload('fornecedorproduto').if(body.numero_for, (query)=>{
                 query.where('numero_prod', body.numero_for )
-            }) */
+            })
 
-            let data = await Produto.query().preload('fornecedorproduto')
-            
+                        
             genericResponse.msg = I18n.locale(body.locale).formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
