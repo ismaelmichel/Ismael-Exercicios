@@ -7,8 +7,8 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('numero_fab')//.references('fabricas.numero_fab')
-      table.integer('numero_prod')//.references('produtos.numero_prod')
+      table.integer('numero_fab').unsigned().references('fabricas.numero_fab')
+      table.integer('numero_prod').unsigned().references('produtos.numero_prod')
       table.unique(['numero_fab','numero_prod'])
 
       /**
