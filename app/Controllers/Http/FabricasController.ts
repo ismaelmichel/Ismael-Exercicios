@@ -4,8 +4,8 @@ import Database from '@ioc:Adonis/Lucid/Database';
 import Fabrica from 'App/Models/Fabrica'
 import FabricaFornecedor from 'App/Models/FabricaFornecedor';
 import Fornecedor from 'App/Models/Fornecedor';
-import User from 'App/Models/User';
 import { GenericResponse } from 'App/Utils/basicMethod';
+import CreatefabricaValidator from 'App/Validators/CreatefabricaValidator';
 
 let genericResponse: GenericResponse
 
@@ -15,7 +15,7 @@ export default class FabricasController {
     genericResponse=new GenericResponse()
   }
 
-  public async index({request, response}: HttpContextContract){
+  public async index({request, response, i18n}: HttpContextContract){
 
     try {
       const data = await request.qs();
@@ -24,7 +24,7 @@ export default class FabricasController {
         query.where('cidade_fab', data.cidade_fab)
       });
 
-      genericResponse.msg="Operção com sucesso"
+      genericResponse.msg = i18n.formatMessage("messages.sucesso")
       genericResponse.data=fabrica
       genericResponse.error=false
       
@@ -32,7 +32,7 @@ export default class FabricasController {
 
     } catch (error) {
       genericResponse.error=true
-      genericResponse.msg="Operação falhada"
+      genericResponse.msg = i18n.formatMessage('messages.error')
         
       return response.status(500).json(genericResponse)
     }    
@@ -40,25 +40,22 @@ export default class FabricasController {
   }
 
   //Querie 6 => nome fornecedor q abastence fabrica de cidade x em produto cor y
-  public async fornecedorfabrica({request, response}: HttpContextContract){
+  public async fornecedorfabrica({request, response, i18n}: HttpContextContract){
     const filter = request.qs()
     try {
-      /* const fornecedor = await Database.from(Fabrica.table + ' as f')
+      const fornecedor = await Database.from(Fabrica.table + ' as f')
       .select({
         nome_fabrica: 'f.nome_fab',
         numero_fabrica: 'f.numero_fab',
         cidade_fabrica: 'f.cidade_fab',
-        nome_fornecedor: 'for.nome_for',
-        numero_fornecedor: 'for.numero_for'
+      //  nome_fornecedor: 'for.nome_for',
+      //  numero_fornecedor: 'for.numero_for'
       })
-      .innerJoin(FabricaFornecedor.table + ' as ff','f.numero_fab','ff.numero_fab')
-      .innerJoin(Fornecedor.table + ' as for', 'for.numero_for','ff.numero_for')
-      .where('f.cidade_fab', filter.cidade_fab) */
-
-      let fornecedor = await User.query()
-                      .preload('posts')
-
-        genericResponse.msg="Operção com sucesso"
+     // .innerJoin(FabricaFornecedor.table + ' as ff','f.numero_fab','ff.numero_fab')
+     // .innerJoin(Fornecedor.table + ' as for', 'for.numero_for','ff.numero_for')
+     // .where('f.cidade_fab', filter.cidade_fab)
+      
+        genericResponse.msg = i18n.formatMessage('messages.sucesso')
         genericResponse.data= fornecedor
         genericResponse.error=false
       
@@ -66,25 +63,43 @@ export default class FabricasController {
       
     } catch (error) {
       genericResponse.error=true
-      genericResponse.msg="Operação falhada"
+      genericResponse.msg= i18n.formatMessage('messages.error')
         console.log("ERR", error)
       return response.status(500).json(genericResponse)
     } 
   }
 
   // Create fabrica
-  public async store({request, response}: HttpContextContract) {
-
-    const body = request.body()
+  public async store({request, response, i18n}: HttpContextContract) {
+    let body ;
     try {
-      const data = await Fabrica.create(body);
-      response.status(201)
-      return {
-        message: "Fabrica registado com sucesso!!!",
-        data: data,
-      }
+      body = await request.validate(CreatefabricaValidator)
     } catch (error) {
-      return response.json("Erro")
+      let data = error.messages.errors.map((e)=>{
+        return{
+          field: e.field,
+          message: e.message
+        }
+      })
+      genericResponse.msg = data
+      genericResponse.error = true
+
+      return response.status(400).json(genericResponse)
+    }
+        
+    try {
+      await Fabrica.create(body);
+      
+      genericResponse.msg = i18n.formatMessage('messages.sucesso')
+      genericResponse.error = false
+    
+      return response.status(200).json(genericResponse)
+      
+    } catch (error) {
+      genericResponse.msg = i18n.formatMessage('messages.error')
+      genericResponse.error = true
+
+      return response.status(500).json(genericResponse)
     }
     
   }

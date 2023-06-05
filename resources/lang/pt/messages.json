@@ -1,3 +1,4 @@
 {
-    "sucesso": "Operação feita com sucesso"
-  }
+  "sucesso": "Operação feita com sucesso",
+  "error": "Operação falhada"
+}

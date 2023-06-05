@@ -3,6 +3,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import FornecedorProduto from './FornecedorProduto'
+import FabricaFornecedor from './FabricaFornecedor'
 
 export default class Fornecedor extends BaseModel {
   public static table = 'fornecedores'
@@ -27,5 +28,8 @@ export default class Fornecedor extends BaseModel {
 
   @hasMany(() => FornecedorProduto, {foreignKey: 'numeroFor'})
   public fornecedorproduto: HasMany<typeof FornecedorProduto>
+
+  @hasMany(() => FabricaFornecedor, {foreignKey: "numeroFor"})
+  public fabricafornecedor: HasMany <typeof FabricaFornecedor>
 
 }

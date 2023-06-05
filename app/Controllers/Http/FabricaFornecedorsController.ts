@@ -13,18 +13,15 @@ export default class FabricaFornecedorsController {
     }
 
     // List fabricaFornecedor
-    public async index({request, response}: HttpContextContract){
+    public async index({request, response, i18n}: HttpContextContract){
         const data = request.qs();
         try {
-            const produtoCor = await Produto.query().if(data.cor, (query)=>{
-                query.where('cor', data.cor )
-            })
-
+            
             const fabricaFornecedor = await FabricaFornecedor.query().if(data.numero_fab, (query)=>{
                 query.where('numero_fab', data.numero_fab)
             })
 
-            genericResponse.msg="Operção com sucesso"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data= fabricaFornecedor
             genericResponse.error=false
       
@@ -32,7 +29,8 @@ export default class FabricaFornecedorsController {
             
         } catch (error) {
             genericResponse.error=true
-            genericResponse.msg="Operação falhada"
+            console.log("Err", error)
+            genericResponse.msg = i18n.formatMessage('messages.error')
               
             return response.status(500).json(genericResponse)
         }  
