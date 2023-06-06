@@ -12,30 +12,29 @@ export default class ProdutosController {
         genericResponse = new GenericResponse()
     }
 
-    public async index({request, response}: HttpContextContract){        
+    public async index({request, response, i18n}: HttpContextContract){        
         try {
             const body = request.qs();
             let data = await Produto.query().preload('fornecedorproduto').if(body.numero_for, (query)=>{
                 query.where('numero_prod', body.numero_for )
             })
 
-                        
-            genericResponse.msg = I18n.locale(body.locale).formatMessage('messages.sucesso')
+            //I18n.locale(body.locale).formatMessage('messages.sucesso') 
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
-            console.log("EEERRR", error)
             return response.status(500).json(genericResponse)
         }
     }
 
 
-    public async store({request, response}: HttpContextContract){
+    public async store({request, response, i18n}: HttpContextContract){
         let body ;
         try {            
             body = await request.validate(CreateprodutoValidator)
@@ -55,32 +54,32 @@ export default class ProdutosController {
         try {
             const data = await Produto.create(body)
             
-            genericResponse.msg = "Produto registado com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
             return response.status(500).json(genericResponse)
         }
         
     }
 
-    public async show({response,params}: HttpContextContract){
+    public async show({response,params, i18n}: HttpContextContract){
         try {
             const data = await Produto.findOrFail(params.id)
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
@@ -88,7 +87,7 @@ export default class ProdutosController {
     }
 
     //update produto
-    public async update({request, response, params}: HttpContextContract){
+    public async update({request, response, params, i18n}: HttpContextContract){
         const body = request.body();
         try {
             const produto = await Produto.findOrFail(params.id)
@@ -101,14 +100,14 @@ export default class ProdutosController {
             await produto.save()
 
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = produto
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
@@ -116,20 +115,21 @@ export default class ProdutosController {
 
     }
 
-    public async destroy({response, params}){
+    public async destroy({response, params, i18n}){
         try {
             const data = await Produto.findOrFail(params.id)
 
             await data.delete();
-
-            genericResponse.msg = I18n.locale('en').formatMessage('messages.sucesso')
+            
+            //I18n.locale('en').formatMessage('messages.sucesso')
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
