@@ -64,7 +64,7 @@ export default class FabricasController {
     } catch (error) {
       genericResponse.error=true
       genericResponse.msg= i18n.formatMessage('messages.error')
-        console.log("ERR", error)
+        
       return response.status(500).json(genericResponse)
     } 
   }
@@ -105,29 +105,29 @@ export default class FabricasController {
   }
 
   //List fabrica by id
-  public async show({params}: HttpContextContract){
+  public async show({params, i18n}: HttpContextContract){
     const data = await Fabrica.findOrFail(params.id)
 
     return{
-      message: `Fabrica ${params.id} encontrada com sucesso`,
+      message: i18n.formatMessage('messages.error'),
       data: data
     }
   }
 
   //Delete fabrica by id
-  public async destroy({params}: HttpContextContract){
+  public async destroy({params, i18n}: HttpContextContract){
     const fabrica = await Fabrica.findOrFail(params.id);
 
     await fabrica.delete()
 
     return{
-      message: `Fabrica ${params.id} apagada com sucesso`,
+      message: i18n.formatMessage("messages.sucesso"),
       data: fabrica
     }
   }
 
   //Update fabrica by id
-  public async update({request, params}: HttpContextContract){
+  public async update({request, params, i18n}: HttpContextContract){
     const body = request.body()
     const fabrica = await Fabrica.findOrFail(params.id);
 
@@ -138,7 +138,7 @@ export default class FabricasController {
     await fabrica.save()
 
     return{
-      message: `Fabrica ${params.id} atualizado com sucesso`,
+      message: i18n.formatMessage("messages.sucesso"),
       data: fabrica
     }
   }

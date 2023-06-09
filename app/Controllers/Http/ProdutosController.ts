@@ -2,7 +2,6 @@
  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Produto from 'App/Models/Produto';
 import { GenericResponse } from 'App/Utils/basicMethod';
-import I18n from '@ioc:Adonis/Addons/I18n'
 import CreateprodutoValidator from 'App/Validators/CreateprodutoValidator';
 
 let genericResponse : GenericResponse

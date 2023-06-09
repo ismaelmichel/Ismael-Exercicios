@@ -13,7 +13,7 @@ export default class FornecedoresController {
         genericResponse=new GenericResponse()
     }
 
-    public async index({request, response}: HttpContextContract){
+    public async index({request, response, i18n}: HttpContextContract){
         try {
             const data = await request.qs();
 
@@ -22,7 +22,7 @@ export default class FornecedoresController {
                 query.where('numero_for', data.numero_for)
               });
             
-            genericResponse.msg="Operção com sucesso"
+            genericResponse.msg= i18n.formatMessage("messages.sucesso"),
             genericResponse.data=fornecedor
             genericResponse.error=false
             
@@ -30,14 +30,14 @@ export default class FornecedoresController {
 
         } catch (error) {
             genericResponse.error=true
-            genericResponse.msg="Operação falhada"
+            genericResponse.msg = i18n.formatMessage('messages.error');
                 
             return response.status(500).json(genericResponse)
         }
         
     }
 
-    public async store({request, response}: HttpContextContract){
+    public async store({request, response, i18n}: HttpContextContract){
         let body;
         try {
             body= await request.validate(CreatefornecedorValidator)
@@ -56,32 +56,32 @@ export default class FornecedoresController {
 
         try {
             const data = await Fornecedor.create(body)
-            genericResponse.msg="Operção com sucesso"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data= data
             genericResponse.error= false
             
             return response.status(200).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg="Operação falhada"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error= true
             return response.status(500).json(genericResponse)
         }
            
     }
 
-    public async show({response,params}: HttpContextContract){
+    public async show({response,params, i18n}: HttpContextContract){
         try {
             const data = await Fornecedor.findOrFail(params.id)
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
@@ -89,7 +89,7 @@ export default class FornecedoresController {
     }
 
     //update fornecedor
-    public async update({request, response, params}: HttpContextContract){
+    public async update({request, response, params, i18n}: HttpContextContract){
         const body = request.body();
         try {
             const fornecedor = await Fornecedor.findOrFail(params.id)
@@ -100,14 +100,14 @@ export default class FornecedoresController {
 
             await fornecedor.save()
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = fornecedor
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
@@ -115,20 +115,20 @@ export default class FornecedoresController {
 
     }
 
-    public async destroy({response, params}){
+    public async destroy({response, params, i18n}){
         try {
             const data = await Fornecedor.findOrFail(params.id)
 
             await data.delete();
 
-            genericResponse.msg = "Operação feita com sucesso!!!"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data = data
             genericResponse.error = false
 
             return response.status(201).json(genericResponse)
             
         } catch (error) {
-            genericResponse.msg = "Operação falhada!!!"
+            genericResponse.msg = i18n.formatMessage('messages.error')
             genericResponse.error = true
 
             return response.status(500).json(genericResponse) 
