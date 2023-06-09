@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import FabricaProduto from './FabricaProduto'
 import Fornecedor from './Fornecedor'
+import FabricaFornecedor from './FabricaFornecedor'
 
 export default class Fabrica extends BaseModel {
   @column({ isPrimary: true })
@@ -20,4 +21,9 @@ export default class Fabrica extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
   
+  @hasMany(() => FabricaProduto, {foreignKey: 'numeroFab'})
+  public fabricaproduto: HasMany<typeof FabricaProduto>
+
+  @hasMany(()=> FabricaFornecedor, {foreignKey: 'numeroFab'})
+  public fabricafornecedor: HasMany<typeof FabricaFornecedor>
 }

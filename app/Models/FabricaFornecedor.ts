@@ -2,6 +2,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Fornecedor from './Fornecedor'
+import Fabrica from './Fabrica'
 
 export default class FabricaFornecedor extends BaseModel {
   @column({ isPrimary: true })
@@ -21,4 +22,7 @@ export default class FabricaFornecedor extends BaseModel {
 
   @belongsTo(() => Fornecedor)
   public fornecedor: BelongsTo<typeof Fornecedor>
+
+  @belongsTo(()=> Fabrica)
+  public fabrica: BelongsTo<typeof Fabrica>
 }

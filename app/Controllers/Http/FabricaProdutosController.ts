@@ -12,14 +12,14 @@ export default class FabricaProdutosController {
     }
 
     // List FabricaProduto
-    public async index({request, response}: HttpContextContract){
+    public async index({request, response, i18n}: HttpContextContract){
         try {
             const data = request.qs();
             const fabricaProduto = await FabricaProduto.query().if(data.numero_fab, (query)=>{
                 query.where('numero_fab', data.numero_fab)
             })
 
-            genericResponse.msg="Operção com sucesso"
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
             genericResponse.data=fabricaProduto
             genericResponse.error=false
       
@@ -27,27 +27,27 @@ export default class FabricaProdutosController {
             
         } catch (error) {
             genericResponse.error=true
-            genericResponse.msg="Operação falhada"
+            genericResponse.msg = i18n.formatMessage('messages.error')
               
             return response.status(500).json(genericResponse)
         }  
     }
 
     // create
-    public async store({request, response}: HttpContextContract){
+    public async store({request, response, i18n}: HttpContextContract){
         const body = request.body();
         try {
             const data = await FabricaProduto.create(body)
 
-            genericResponse.msg="Operção com sucesso"
-            genericResponse.data=data
-            genericResponse.error=false
+            genericResponse.msg = i18n.formatMessage('messages.sucesso')
+            genericResponse.data = data
+            genericResponse.error = false
       
             return response.status(200).json(genericResponse)
             
         } catch (error) {
             genericResponse.error=true
-            genericResponse.msg="Operação falhada"
+            genericResponse.msg = i18n.formatMessage('messages.error')
               
             return response.status(500).json(genericResponse)
         } 
